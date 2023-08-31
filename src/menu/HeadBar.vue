@@ -21,17 +21,22 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const activeIndex = ref("0");
+
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
+  if (key === "0") {
+    router.push("/main");
+  }
 };
 </script>
 
 <style lang="less">
 .head-bar {
   width: 100%;
-
   .flex-grow {
     flex-grow: 1;
   }
