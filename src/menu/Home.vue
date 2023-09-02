@@ -18,8 +18,10 @@ import MainContent from "./MainContent.vue";
 <style lang="less" scoped>
 .header {
     width: 100%;
+    min-width: 1290px;
 }
 .main-content {
   width: 1290px;
+  margin-top: 60px;
 }
 </style>

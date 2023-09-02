@@ -37,6 +37,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
 <style lang="less">
 .head-bar {
   width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
   .flex-grow {
     flex-grow: 1;
   }
