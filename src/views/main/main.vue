@@ -1,7 +1,8 @@
 <template>
   <div class="main">
     <div class="header">
-      <el-carousel :interval="0" type="card" height="280px">
+      <!-- 头部走马灯 -->
+      <el-carousel :interval="4000" type="card" height="280px">
         <el-carousel-item
           v-for="item in headerBannerList"
           :key="item.id"
@@ -32,15 +33,9 @@ const headerBannerList = [
   {
     id: 3,
     bannerUrl:
-      "https://tw1-1301642022.cos.ap-shanghai.myqcloud.com/2048-banner.png",
-    gameUrl: "../../../public/games/2048/index.html",
-  },
-  {
-    id: 4,
-    bannerUrl:
-      "https://tw1-1301642022.cos.ap-shanghai.myqcloud.com/2048-banner.png",
-    gameUrl: "../../../public/games/2048/index.html",
-  },
+      "https://tw1-1301642022.cos.ap-shanghai.myqcloud.com/ball-impact-banner.png",
+    gameUrl: "../../../public/games/ballImpact/index.html",
+  }
 ];
 // 打开游戏链接
 const openGame = (item) => {
