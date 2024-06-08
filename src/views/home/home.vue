@@ -1,6 +1,7 @@
 <template>
   <div
     class="home"
+    @mouseup="btnsMouseup()"
   >
     <div class="title">
       8bit
@@ -9,8 +10,10 @@
       <div
         v-for="item in btns"
         :key="item.note"
+        :ref="item.note"
         class="btn"
-        @click="play(item.note)"
+        @mousedown="play(item.note)"
+        @mouseup.stop="btnMouseup(item.note)"
       >
         {{ item.note }}
       </div>
@@ -19,11 +22,13 @@
 </template>
 <script lang="ts" setup>
 import { playMarioTheme } from '../../utils/player.js'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 
 // 上一个按钮code
 const previousCode = ref('Key')
 const lastExecutionTime = ref(0)
+const { proxy } = getCurrentInstance()
+
 // 按钮
 const btns = ref([
   { note: 'C', octave: 4, duration: 125 },
@@ -39,6 +44,7 @@ const btns = ref([
   { note: 'A#', octave: 4, duration: 125 },
   { note: 'B', octave: 4, duration: 125 }
 ])
+
 // 键盘按下事件
 const handleKeydown = (e) => {
   // 节流，暂时不太完美，只有第二次才会有记录
@@ -76,17 +82,63 @@ const handleKeydown = (e) => {
     play('B')
   }
 }
+
 // 键盘弹起时，将上一个按钮code重置，以实现按键连击
-const handleKeyup = () => {
+const handleKeyup = (e) => {
   previousCode.value = 'Key'
+  if (e.code === 'KeyA') {
+    btnMouseup('C')
+  }else if (e.code === 'KeyS') {
+    btnMouseup('C#')
+  }else if (e.code === 'KeyD') {
+    btnMouseup('D')
+  }else if (e.code === 'KeyF') {
+    btnMouseup('D#')
+  }else if (e.code === 'KeyG') {
+    btnMouseup('E')
+  }else if (e.code === 'KeyH') {
+    btnMouseup('F')
+  }else if (e.code === 'KeyJ') {
+    btnMouseup('G')
+  }else if (e.code === 'KeyK') {
+    btnMouseup('G#')
+  }else if (e.code === 'KeyL') {
+    btnMouseup('A')
+  }else if (e.code === 'Semicolon') {
+    btnMouseup('A#')
+  }else if (e.code === 'Quote') {
+    btnMouseup('B')
+  }
 }
 
 // 播放方法
 const play = (note) => {
+  const refElement = proxy.$refs[note]
+  if (refElement instanceof HTMLElement) {
+    refElement.classList.add('active')
+  }
   const marioTheme = [
     { note: note, octave: 4, duration: 250 }
   ]
   playMarioTheme(marioTheme)
+}
+
+// 鼠标弹起，删除样式
+const btnMouseup = (note) => {
+  const refElement = proxy.$refs[note]
+  if (refElement instanceof HTMLElement) {
+    refElement.classList.remove('active')
+  }
+}
+
+// 页面鼠标弹起，删除样式
+const btnsMouseup = () => {
+  for (let i = 0; i < btns.value.length; i++) {
+    const refElement = proxy.$refs[btns.value[i].note]
+    if (refElement instanceof HTMLElement) {
+      refElement.classList.remove('active')
+    }
+  }
 }
 
 onMounted(() => {
@@ -129,6 +181,9 @@ onUnmounted(() => {
       }
       .btn:nth-child(2n) {
         background-color: rgba(44, 140, 219, 0.8);
+      }
+      .active {
+        opacity: 0.4;
       }
     }
   }

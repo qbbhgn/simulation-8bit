@@ -42,6 +42,7 @@ module.exports = {
     //     'allowFirstLine': false
     //   }
     // }],
+    'no-undef': [ 'error', { 'globals': { 'proxy': 'readable' } } ],
 
     'vue/multi-word-component-names': 0,
     eqeqeq: [ 'error', 'always', { null: 'ignore' } ], // 强制使用 === 和 !==
