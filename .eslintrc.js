@@ -4,11 +4,9 @@ module.exports = {
     'es2021': true,
     'node': true
   },
-  "parser": "@typescript-eslint/parser",
   'extends': [
     'eslint:recommended',
-    'plugin:vue/recommended',
-    '@typescript-eslint/recommended'
+    'plugin:vue/recommended'
   ],
   'globals': {
     'swan': 'readonly',
@@ -34,7 +32,7 @@ module.exports = {
   },
   'plugins': [
     'vue',
-    "@typescript-eslint"
+    '@typescript-eslint'
   ],
   'rules': {
     // 'vue/max-attributes-per-line': [2, {

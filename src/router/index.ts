@@ -3,10 +3,15 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
+    name: 'home',
+    component: () => import('../views/home/home.vue')
+  },
+  {
+    path: '/main',
     name: 'main',
     component: () => import('../views/main/main.vue')
-  }
+  },
 ]
 
 const router = createRouter({
@@ -16,9 +21,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   console.log("路由信息", to, from);
-  // if (to.path === '/') {
-  //   router.push('/main')
-  // }
+  if (to.path === '/') {
+    router.push('/home')
+  }
   next();
 });
 
