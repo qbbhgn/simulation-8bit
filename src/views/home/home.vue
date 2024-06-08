@@ -34,12 +34,28 @@
       <div class="octave-text">
         选中可按键盘方向键滚动
       </div>
+      <div class="music-list">
+        <el-button @click="playMusic(1)">
+          超级玛丽
+        </el-button>
+        <el-button
+          v-if="false"
+          @click="datapro"
+        >
+          数据处理
+        </el-button>
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { playMarioTheme } from '../../utils/player.js'
+import { MarioSynth2 } from '../../notes/mario/synth2.js'
+import { MarioSynth1 } from '../../notes/mario/synth1.js'
+import { MarioBass1 } from '../../notes/mario/bass1.js'
 import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue'
+import { datayy } from '../../notes/mario/data'
+import { saveAs } from 'file-saver'
 
 // 上一个按钮code
 const previousCode = ref('Key')
@@ -78,7 +94,7 @@ const handleKeydown = (e) => {
   // 节流，暂时不太完美，只有第二次才会有记录
   if (previousCode.value === e.code) {
     const now = new Date().getTime() // 当前时间
-    if (now - lastExecutionTime.value >= 250) {
+    if (now - lastExecutionTime.value >= 220) {
       // 如果达到了指定的延迟时间，则执行函数
       lastExecutionTime.value = now // 更新上次执行时间为当前时间
     }else {
@@ -119,7 +135,7 @@ const handleKeyup = () => {
   btnsMouseup()
 }
 
-// 播放方法
+// 按钮播放方法
 const play = (note) => {
   const refElement = proxy.$refs[note]
   if (refElement instanceof HTMLElement) {
@@ -130,14 +146,36 @@ const play = (note) => {
   ]
   playMarioTheme(marioTheme)
 }
-
-// // 鼠标弹起，删除样式
-// const btnMouseup = (note) => {
-//   const refElement = proxy.$refs[note]
-//   if (refElement instanceof HTMLElement) {
-//     refElement.classList.remove('active')
-//   }
-// }
+const datapro = () => {
+// 数据处理
+  const enhanced = []
+  for (let index = 0; index < datayy.length; index++) {
+    const element = datayy[index]
+    const num = element.note[element.note.length - 1]
+    element.octave = num
+    element.note = element.note.substring(0, element.note.length - 1)
+    element.duration = element.duration * 1000
+    element.time = element.time * 1000
+    enhanced.push(element)
+    if (index < datayy.length - 1) {
+      const rest = { note: 'rest', duration: datayy[index + 1].time * 1000 - element.time - element.duration }
+      enhanced.push(rest)
+    }
+  }
+  const jsonString = JSON.stringify(enhanced, null, 2)
+  const blob = new Blob([ jsonString ], { type: 'application/javascript' })
+  saveAs(blob, 'output.text')
+  console.log(enhanced)
+}
+// 音乐播放方法
+const playMusic = (num) => {
+  if (num === 1) {
+    playMarioTheme(MarioBass1)
+    // playMarioTheme(MarioBass2)
+    playMarioTheme(MarioSynth1)
+    playMarioTheme(MarioSynth2)
+  }
+}
 
 // 页面鼠标弹起，删除样式
 const btnsMouseup = () => {
@@ -212,4 +250,4 @@ onUnmounted(() => {
       }
     }
   }
-</style>
+</style>../../notes/mario/synth2.js
