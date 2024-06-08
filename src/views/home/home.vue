@@ -15,7 +15,12 @@
         @mousedown="play(item.note)"
         @mouseup.stop="btnMouseup(item.note)"
       >
-        {{ item.note }}
+        <div class="prosody">
+          {{ item.note }}
+        </div>
+        <div class="btn-name">
+          {{ item.code }}
+        </div>
       </div>
     </div>
   </div>
@@ -31,18 +36,18 @@ const { proxy } = getCurrentInstance()
 
 // 按钮
 const btns = ref([
-  { note: 'C', octave: 4, duration: 125 },
-  { note: 'C#', octave: 4, duration: 125 },
-  { note: 'D', octave: 4, duration: 125 },
-  { note: 'D#', duration: 125 },
-  { note: 'E', octave: 4, duration: 125 },
-  { note: 'F', octave: 4, duration: 125 },
-  { note: 'F#', octave: 4, duration: 125 },
-  { note: 'G', octave: 4, duration: 125 },
-  { note: 'G#', octave: 4, duration: 125 },
-  { note: 'A', octave: 4, duration: 125 },
-  { note: 'A#', octave: 4, duration: 125 },
-  { note: 'B', octave: 4, duration: 125 }
+  { note: 'C', octave: 4, duration: 125, code: 'A' },
+  { note: 'C#', octave: 4, duration: 125, code: 'S' },
+  { note: 'D', octave: 4, duration: 125, code: 'D' },
+  { note: 'D#', octave: 4, duration: 125, code: 'Q' },
+  { note: 'E', octave: 4, duration: 125, code: 'W' },
+  { note: 'F', octave: 4, duration: 125, code: 'E' },
+  { note: 'F#', octave: 4, duration: 125, code: 'J' },
+  { note: 'G', octave: 4, duration: 125, code: 'K' },
+  { note: 'G#', octave: 4, duration: 125, code: 'L' },
+  { note: 'A', octave: 4, duration: 125, code: 'U' },
+  { note: 'A#', octave: 4, duration: 125, code: 'I' },
+  { note: 'B', octave: 4, duration: 125, code: 'O' }
 ])
 
 // 键盘按下事件
@@ -64,21 +69,23 @@ const handleKeydown = (e) => {
     play('C#')
   }else if (e.code === 'KeyD') {
     play('D')
-  }else if (e.code === 'KeyF') {
+  }else if (e.code === 'KeyQ') {
     play('D#')
-  }else if (e.code === 'KeyG') {
+  }else if (e.code === 'KeyW') {
     play('E')
-  }else if (e.code === 'KeyH') {
+  }else if (e.code === 'KeyE') {
     play('F')
   }else if (e.code === 'KeyJ') {
-    play('G')
+    play('F#')
   }else if (e.code === 'KeyK') {
-    play('G#')
+    play('G')
   }else if (e.code === 'KeyL') {
+    play('G#')
+  }else if (e.code === 'KeyU') {
     play('A')
-  }else if (e.code === 'Semicolon') {
+  }else if (e.code === 'KeyI') {
     play('A#')
-  }else if (e.code === 'Quote') {
+  }else if (e.code === 'KeyO') {
     play('B')
   }
 }
@@ -92,21 +99,23 @@ const handleKeyup = (e) => {
     btnMouseup('C#')
   }else if (e.code === 'KeyD') {
     btnMouseup('D')
-  }else if (e.code === 'KeyF') {
+  }else if (e.code === 'KeyQ') {
     btnMouseup('D#')
-  }else if (e.code === 'KeyG') {
+  }else if (e.code === 'KeyW') {
     btnMouseup('E')
-  }else if (e.code === 'KeyH') {
+  }else if (e.code === 'KeyE') {
     btnMouseup('F')
   }else if (e.code === 'KeyJ') {
-    btnMouseup('G')
+    btnMouseup('F#')
   }else if (e.code === 'KeyK') {
-    btnMouseup('G#')
+    btnMouseup('G')
   }else if (e.code === 'KeyL') {
+    btnMouseup('G#')
+  }else if (e.code === 'KeyU') {
     btnMouseup('A')
-  }else if (e.code === 'Semicolon') {
+  }else if (e.code === 'KeyI') {
     btnMouseup('A#')
-  }else if (e.code === 'Quote') {
+  }else if (e.code === 'KeyO') {
     btnMouseup('B')
   }
 }
@@ -176,8 +185,16 @@ onUnmounted(() => {
         height: 140px;
         background-color: rgba(255, 0, 0, 0.8);
         text-align: center;
-        line-height: 100px;
         user-select: none;
+        .prosody {
+          font-size: 20px;
+          line-height: 35px;
+          color: rgba(72, 255, 0, 0.26);
+        }
+        .btn-name {
+          font-size: 20px;
+          line-height: 80px;
+        }
       }
       .btn:nth-child(2n) {
         background-color: rgba(44, 140, 219, 0.8);
