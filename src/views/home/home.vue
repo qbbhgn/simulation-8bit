@@ -3,9 +3,11 @@
     class="home"
     @mouseup="btnsMouseup()"
   >
+    <!-- 标题 -->
     <div class="title">
       8bit
     </div>
+    <!-- 音频按钮 -->
     <div class="btns flex-center">
       <div
         v-for="item in btns"
@@ -13,7 +15,6 @@
         :ref="item.note"
         class="btn"
         @mousedown="play(item.note)"
-        @mouseup.stop="btnMouseup(item.note)"
       >
         <div class="prosody">
           {{ item.note }}
@@ -21,6 +22,17 @@
         <div class="btn-name">
           {{ item.code }}
         </div>
+      </div>
+    </div>
+    <!-- 八度选择器 -->
+    <div class="octave">
+      <el-segmented
+        v-model="octave"
+        :options="octaveOptions"
+        block
+      />
+      <div class="octave-text">
+        选中可按键盘方向键滚动
       </div>
     </div>
   </div>
@@ -31,8 +43,19 @@ import { ref, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 
 // 上一个按钮code
 const previousCode = ref('Key')
-const lastExecutionTime = ref(0)
+const lastExecutionTime = ref(0)//上一次按下的时间
 const { proxy } = getCurrentInstance()
+// 八度
+const octave = ref(4)
+const octaveOptions = ref([
+  { label: '1', value: 1 },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+  { label: '4', value: 4 },
+  { label: '5', value: 5 },
+  { label: '6', value: 6 },
+  { label: '7', value: 7 }
+])
 
 // 按钮
 const btns = ref([
@@ -91,33 +114,9 @@ const handleKeydown = (e) => {
 }
 
 // 键盘弹起时，将上一个按钮code重置，以实现按键连击
-const handleKeyup = (e) => {
+const handleKeyup = () => {
   previousCode.value = 'Key'
-  if (e.code === 'KeyA') {
-    btnMouseup('C')
-  }else if (e.code === 'KeyS') {
-    btnMouseup('C#')
-  }else if (e.code === 'KeyD') {
-    btnMouseup('D')
-  }else if (e.code === 'KeyQ') {
-    btnMouseup('D#')
-  }else if (e.code === 'KeyW') {
-    btnMouseup('E')
-  }else if (e.code === 'KeyE') {
-    btnMouseup('F')
-  }else if (e.code === 'KeyJ') {
-    btnMouseup('F#')
-  }else if (e.code === 'KeyK') {
-    btnMouseup('G')
-  }else if (e.code === 'KeyL') {
-    btnMouseup('G#')
-  }else if (e.code === 'KeyU') {
-    btnMouseup('A')
-  }else if (e.code === 'KeyI') {
-    btnMouseup('A#')
-  }else if (e.code === 'KeyO') {
-    btnMouseup('B')
-  }
+  btnsMouseup()
 }
 
 // 播放方法
@@ -127,18 +126,18 @@ const play = (note) => {
     refElement.classList.add('active')
   }
   const marioTheme = [
-    { note: note, octave: 4, duration: 250 }
+    { note: note, octave: octave.value, duration: 250 }
   ]
   playMarioTheme(marioTheme)
 }
 
-// 鼠标弹起，删除样式
-const btnMouseup = (note) => {
-  const refElement = proxy.$refs[note]
-  if (refElement instanceof HTMLElement) {
-    refElement.classList.remove('active')
-  }
-}
+// // 鼠标弹起，删除样式
+// const btnMouseup = (note) => {
+//   const refElement = proxy.$refs[note]
+//   if (refElement instanceof HTMLElement) {
+//     refElement.classList.remove('active')
+//   }
+// }
 
 // 页面鼠标弹起，删除样式
 const btnsMouseup = () => {
@@ -176,7 +175,6 @@ onUnmounted(() => {
       margin-top: 100px;
     }
     .btns {
-      // width: 500px;
       margin-left: 50%;
       transform: translateX(-50%) translateY(-50%);
       margin-top: calc(50vh - 200px);
@@ -189,7 +187,7 @@ onUnmounted(() => {
         .prosody {
           font-size: 20px;
           line-height: 35px;
-          color: rgba(72, 255, 0, 0.26);
+          color: rgba(72, 255, 0, 0.36);
         }
         .btn-name {
           font-size: 20px;
@@ -197,10 +195,20 @@ onUnmounted(() => {
         }
       }
       .btn:nth-child(2n) {
-        background-color: rgba(44, 140, 219, 0.8);
+        background-color: rgba(85, 158, 255, 1);
       }
       .active {
         opacity: 0.4;
+      }
+    }
+    .octave {
+      margin-left: 50%;
+      transform: translateX(-50%);
+      user-select: none;
+      .octave-text {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
       }
     }
   }
